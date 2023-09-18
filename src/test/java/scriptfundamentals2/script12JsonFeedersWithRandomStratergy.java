@@ -1,4 +1,4 @@
-package scriptfundamentals;
+package scriptfundamentals2;
 
 import io.gatling.javaapi.core.ChainBuilder;
 import io.gatling.javaapi.core.FeederBuilder;
@@ -10,7 +10,7 @@ import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.http;
 import static io.gatling.javaapi.http.HttpDsl.status;
 
-public class script12JsonFeeders extends Simulation {
+public class script12JsonFeedersWithRandomStratergy extends Simulation {
 
     private HttpProtocolBuilder httpProtocolBuilder=http
             .baseUrl("https://www.videogamedb.uk/")
@@ -18,7 +18,7 @@ public class script12JsonFeeders extends Simulation {
 
 
     //json Feeder
-    FeederBuilder.FileBased<Object> jsonObject=jsonFile("data/GameDataJson.json").circular();
+    FeederBuilder.FileBased<Object> jsonObject=jsonFile("data/GameDataJson.json").random();
     ChainBuilder callASpecificGame=feed(jsonObject).exec(http("call a PC game - #{name}")
             .get("api/videogame/#{id}")
             .check(status().is(200))

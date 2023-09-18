@@ -1,4 +1,4 @@
-package simulations;
+package simulations3;
 
 import io.gatling.javaapi.core.ChainBuilder;
 import io.gatling.javaapi.core.ScenarioBuilder;

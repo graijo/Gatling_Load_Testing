@@ -1,4 +1,4 @@
-package scriptfundamentals;
+package scriptfundamentals2;
 
 import io.gatling.javaapi.core.ChainBuilder;
 import io.gatling.javaapi.core.ScenarioBuilder;

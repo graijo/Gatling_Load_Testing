@@ -1,19 +1,16 @@
-package scriptfundamentals;
+package scriptfundamentals2;
 
-import io.gatling.javaapi.core.CheckBuilder;
 import io.gatling.javaapi.core.ScenarioBuilder;
 import io.gatling.javaapi.core.Simulation;
 import io.gatling.javaapi.http.HttpProtocolBuilder;
 
 import java.time.Duration;
-import java.util.Collections;
-import java.util.List;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.http;
 import static io.gatling.javaapi.http.HttpDsl.status;
 
-public class script5JMEsPath extends Simulation {
+public class script4responseTimeInMillis extends Simulation {
 
     private HttpProtocolBuilder httpProtocolBuilder=http
             .baseUrl("https://www.videogamedb.uk/")
@@ -24,10 +21,10 @@ public class script5JMEsPath extends Simulation {
     private ScenarioBuilder scenarioBuilder=scenario("Main -pause scenarios")
             .exec(http("pause 1").get("/api/videogame")
                     .check(status().is(200))
-                    .check(responseTimeInMillis().lte(800))
-//                    .check(jmesPath("[? category==`Puzzle`].name").ofList().is(List.of("\"Tetris\"," +
-//                            "\"Minecraft\"")))
-                    .check(jmesPath("[?id==`6`].reviewScore").ofList().is(List.of(81)))
+                    .check(responseTimeInMillis().lte(600))
+                    //$[0].name
+                    //$[?(@.id==1)].name
+                    .check(jsonPath("$[?(@.id==1)].name").is( "Resident Evil 4"))
 
             )
 
@@ -37,7 +34,8 @@ public class script5JMEsPath extends Simulation {
             .pause(1,10)
             .exec(http("Pause 3").get("/api/videogame")
                     .check(status().not(404),status().not(500),status().is(200))
-                    .check(jmesPath("[?id== `2`].name").ofList().is(List.of("Gran Turismo 3")))
+                    .check(jsonPath("$[?(@.id==1)].name").is( "Resident Evil 5"))
+                    .check(responseTimeInMillis().lte(100))
             )
             .pause(Duration.ofMillis(3000));
 

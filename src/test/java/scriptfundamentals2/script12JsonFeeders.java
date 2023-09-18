@@ -1,4 +1,4 @@
-package scriptfundamentals;
+package scriptfundamentals2;
 
 import io.gatling.javaapi.core.ChainBuilder;
 import io.gatling.javaapi.core.FeederBuilder;
@@ -10,23 +10,27 @@ import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.http;
 import static io.gatling.javaapi.http.HttpDsl.status;
 
-public class script11Feeders extends Simulation {
+public class script12JsonFeeders extends Simulation {
 
     private HttpProtocolBuilder httpProtocolBuilder=http
             .baseUrl("https://www.videogamedb.uk/")
             .acceptHeader("application/json");
 
 
-    //CSV Feeder
-    FeederBuilder.FileBased<String> csvFeeder=csv("data/GameData.csv").circular();
-    ChainBuilder callASpecificGame=feed(csvFeeder).exec(http("call a PC game - #{gameName}")
-            .get("api/videogame/#{gameId}")
+    //json Feeder
+    FeederBuilder.FileBased<Object> jsonObject=jsonFile("data/GameDataJson.json").circular();
+    ChainBuilder callASpecificGame=feed(jsonObject).exec(http("call a PC game - #{name}")
+            .get("api/videogame/#{id}")
             .check(status().is(200))
             .check(responseTimeInMillis().lte(2000))
-            .check(jmesPath("name").isEL("#{gameName}"))
+            .check(jmesPath("name").isEL("#{name}"))
+                    .check(jmesPath("rating").isEL("#{rating}"))
+                    .check(bodyString().saveAs("responseBody"))
+
          )
             .exec(session -> {
-                System.out.println("Called a PC game - #{gameName}");
+                System.out.println("Called a PC game - name");
+                System.out.println("responseBody is "+session.getString("responseBody"));
                 return session;
             }
 
@@ -37,7 +41,7 @@ public class script11Feeders extends Simulation {
 
 
     private ScenarioBuilder scenarioBuilder=scenario("Call a specific game ---")
-            .repeat(4).on(exec(callASpecificGame));
+            .repeat(10).on(exec(callASpecificGame));
 
     {
        setUp(

@@ -1,15 +1,12 @@
-package computerdatabase;
+package computerdatabase1;
 
-import java.time.Duration;
 import java.util.*;
 
 import io.gatling.javaapi.core.*;
 import io.gatling.javaapi.http.*;
-import io.gatling.javaapi.jdbc.*;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
-import static io.gatling.javaapi.jdbc.JdbcDsl.*;
 
 public class RecordedSimulation extends Simulation {
 
@@ -59,7 +56,7 @@ public class RecordedSimulation extends Simulation {
       http("request_0")
         .post("/api/authenticate")
         .headers(headers_0)
-        .body(RawFileBody("computerdatabase/recordedsimulation/0000_request.json"))
+        .body(RawFileBody("computerdatabase1/recordedsimulation/0000_request.json"))
     )
     .pause(32)
     .exec(
@@ -72,7 +69,7 @@ public class RecordedSimulation extends Simulation {
       http("request_2")
         .post("/api/videogame")
         .headers(headers_2)
-        .body(RawFileBody("computerdatabase/recordedsimulation/0002_request.json"))
+        .body(RawFileBody("computerdatabase1/recordedsimulation/0002_request.json"))
     );
 
   {

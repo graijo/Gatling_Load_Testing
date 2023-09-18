@@ -1,30 +1,40 @@
-package scriptfundamentals;
+package scriptfundamentals2;
 
 import io.gatling.javaapi.core.ChainBuilder;
-import io.gatling.javaapi.core.FeederBuilder;
 import io.gatling.javaapi.core.ScenarioBuilder;
 import io.gatling.javaapi.core.Simulation;
 import io.gatling.javaapi.http.HttpProtocolBuilder;
+
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.http;
 import static io.gatling.javaapi.http.HttpDsl.status;
 
-public class script12JsonFeedersWithRandomStratergy extends Simulation {
+public class script13CustomeFeeder extends Simulation {
 
     private HttpProtocolBuilder httpProtocolBuilder=http
             .baseUrl("https://www.videogamedb.uk/")
             .acceptHeader("application/json");
 
 
-    //json Feeder
-    FeederBuilder.FileBased<Object> jsonObject=jsonFile("data/GameDataJson.json").random();
-    ChainBuilder callASpecificGame=feed(jsonObject).exec(http("call a PC game - #{name}")
-            .get("api/videogame/#{id}")
+    //custom Feeder
+    private static Iterator<Map<String, Object>> customFeeder =
+            Stream.generate((Supplier<Map<String, Object>>) () -> {
+                        Random rand = new Random();
+                        int gameId = rand.nextInt(10 - 1 + 1) + 1;
+                        return Collections.singletonMap("gameId", gameId);
+                    }
+            ).iterator();
+    ChainBuilder callASpecificGame=feed(customFeeder).exec(http("call a PC game - #{gameId}")
+            .get("api/videogame/#{gameId}")
             .check(status().is(200))
             .check(responseTimeInMillis().lte(2000))
-            .check(jmesPath("name").isEL("#{name}"))
-                    .check(jmesPath("rating").isEL("#{rating}"))
                     .check(bodyString().saveAs("responseBody"))
 
          )
