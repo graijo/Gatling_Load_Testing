@@ -19,6 +19,7 @@ public class script11Feeders extends Simulation {
 
     //CSV Feeder
     FeederBuilder.FileBased<String> csvFeeder=csv("data/GameData.csv").circular();
+    //Variables are #{columnNames of Csv / Key names of Json body}
     ChainBuilder callASpecificGame=feed(csvFeeder).exec(http("call a PC game - #{gameName}")
             .get("api/videogame/#{gameId}")
             .check(status().is(200))
@@ -41,7 +42,7 @@ public class script11Feeders extends Simulation {
 
     {
        setUp(
-               scenarioBuilder.injectOpen(atOnceUsers(1))
+               scenarioBuilder.injectOpen(atOnceUsers(15))
        ).protocols(httpProtocolBuilder);
 
     }
