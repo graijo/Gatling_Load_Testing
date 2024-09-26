@@ -21,3 +21,16 @@ Maven Wrapper
 -------------
 Easy Maven installation: No need to install Maven on your system. The wrapper downloads and configures Maven automatically.
 Project-specific Maven: Allows multiple projects to use different Maven versions without conflicts.
+
+The easiest way to setup the Maven Wrapper for your project is to use the Maven Wrapper Plugin with its provided wrapper goal. To add or update all the necessary Maven Wrapper files to your project execute the following command:
+
+mvn wrapper:wrapper
+Normally you instruct users to install a specific version of Apache Maven, put it on the PATH and then run the mvn command like the following:
+
+mvn clean install
+But now, with a Maven Wrapper setup, you can instruct users to run wrapper scripts:
+
+./mvnw clean install
+or on Windows
+
+mvnw.cmd clean install
